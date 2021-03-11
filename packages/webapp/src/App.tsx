@@ -26,6 +26,7 @@ import { BpmnPage } from "./Pages/KogitoEditors/BpmnPage";
 import { DmnPage } from "./Pages/KogitoEditors/DmnPage";
 import { TodoListViewPage } from "./Pages/TodoList/TodoListViewPage";
 import { PingPongViewsPage } from "./Pages/PingPong/PingPongViewsPage";
+import { PingPongViewsWithDivPage } from "./Pages/PingPongWithDiv/PingPongViewsWithDivPage";
 import { Home } from "./Home";
 import "../static/resources/styles.css";
 import { DmnStandaloneEditorPage } from "./Pages/StandaloneEditors/DmnStandaloneEditorPage";
@@ -35,7 +36,8 @@ enum Location {
   DMN = "/editor/dmn",
   BASE46PNG = "/editor/base64png",
   TODO_LIST = "/page/todo-list",
-  PING_PONG_PAGES = "/page/my-custom-page-impls",
+  PING_PONG_PAGES = "/page/ping-pong-pages",
+  PING_PONG_WITH_DIV_PAGES = "/page/ping-pong-with-div-pages",
   STANDALONE_EDITORS = "/page/standalone-editors",
   HOME = "/",
 }
@@ -80,6 +82,9 @@ export function App() {
                   <NavItem itemId={Location.PING_PONG_PAGES} isActive={location === Location.PING_PONG_PAGES}>
                     <Link to={Location.PING_PONG_PAGES}>Ping-Pong Views</Link>
                   </NavItem>
+                  <NavItem itemId={Location.PING_PONG_WITH_DIV_PAGES} isActive={location === Location.PING_PONG_WITH_DIV_PAGES}>
+                    <Link to={Location.PING_PONG_WITH_DIV_PAGES}>Ping-Pong With Div Views</Link>
+                  </NavItem>
                   <NavItem itemId={Location.STANDALONE_EDITORS} isActive={location === Location.STANDALONE_EDITORS}>
                     <Link to={Location.STANDALONE_EDITORS}>DMN Standalone Editor</Link>
                   </NavItem>
@@ -107,6 +112,9 @@ export function App() {
           </Route>
           <Route path={Location.PING_PONG_PAGES}>
             <PingPongViewsPage />
+          </Route>
+          <Route path={Location.PING_PONG_WITH_DIV_PAGES}>
+            <PingPongViewsWithDivPage />
           </Route>
           <Route path={Location.STANDALONE_EDITORS}>
             <DmnStandaloneEditorPage />
