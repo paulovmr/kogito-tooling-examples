@@ -44,21 +44,6 @@ export function PingPongViewsWithDivPage() {
     };
   }, [pings, pongs]);
 
-  useEffect(() => {
-    ["1", "2", "3"].forEach(i => {
-      init({
-        envelopeId: "ping-pong-" + i,
-        container: document.getElementById("ping-pong-" + i)!,
-        bus: {
-          postMessage<D, Type>(message: EnvelopeBusMessage<D, Type>, targetOrigin?: string, transfer?: any) {
-            window.postMessage(message, "*", transfer);
-          },
-        },
-        pingPongViewFactory: new PingPongReactImplFactory(),
-      });
-    });
-  }, []);
-
   return (
     <Page>
       <div className={"webapp--page-main-div"}>
@@ -69,7 +54,8 @@ export function PingPongViewsWithDivPage() {
               {...api}
               name={"React 1"}
               targetOrigin={window.location.origin}
-              mapping={{ title: "Ping-Pong Page in React", envelopeId: "ping-pong-1" }}
+              mapping={{ title: "Ping-Pong Page in React" }}
+              isDiv={true}
             />
           </PageSection>
 
@@ -78,7 +64,8 @@ export function PingPongViewsWithDivPage() {
               {...api}
               name={"React 2"}
               targetOrigin={window.location.origin}
-              mapping={{ title: "Ping-Pong Page in React", envelopeId: "ping-pong-2" }}
+              mapping={{ title: "Ping-Pong Page in React" }}
+              isDiv={true}
             />
           </PageSection>
 
@@ -87,7 +74,8 @@ export function PingPongViewsWithDivPage() {
               {...api}
               name={"React 3"}
               targetOrigin={window.location.origin}
-              mapping={{ title: "Ping-Pong Page in React", envelopeId: "ping-pong-3" }}
+              mapping={{ title: "Ping-Pong Page in React" }}
+              isDiv={true}
             />
           </PageSection>
         </div>

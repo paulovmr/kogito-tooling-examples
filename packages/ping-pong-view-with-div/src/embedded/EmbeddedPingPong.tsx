@@ -19,22 +19,41 @@ import { useCallback, useMemo } from "react";
 import { PingPongApi, PingPongChannelApi, PingPongEnvelopeApi } from "../api";
 import { EnvelopeServer } from "@kogito-tooling/envelope-bus/dist/channel";
 import { EmbeddedEnvelopeFactory } from "@kogito-tooling/envelope/dist/embedded";
+import { useEffect } from "react";
+import { init } from "../envelope";
+import { EnvelopeBusMessage } from "@kogito-tooling/envelope-bus/dist/api";
+import { PingPongReactImplFactory } from "ping-pong-view-with-div-react";
 
 export type Props = PingPongChannelApi & {
   mapping: {
     title: string;
     envelopePath?: string;
-    envelopeId?: string;
   };
   targetOrigin: string;
   name: string;
-  // flagIframe
+  isDiv: boolean;
 };
 
 export const EmbeddedPingPong = React.forwardRef((props: Props, forwardedRef: React.Ref<PingPongApi>) => {
-  const refDelegate = useCallback((envelopeServer): PingPongApi => ({}), []);
+  const refDelegate = useCallback((envelopeServer): PingPongApi => {
+    return {};
+  }, []);
 
   const pollInit = useCallback((envelopeServer: EnvelopeServer<PingPongChannelApi, PingPongEnvelopeApi>) => {
+
+    if (props.isDiv) {
+      init({
+        envelopeId: envelopeServer.id,
+        container: document.getElementById(envelopeServer.id)!,
+        bus: {
+          postMessage<D, Type>(message: EnvelopeBusMessage<D, Type>, targetOrigin?: string, transfer?: any) {
+            window.postMessage(message, "*", transfer);
+          },
+        },
+        pingPongViewFactory: new PingPongReactImplFactory(),
+      });
+    }
+
     return envelopeServer.envelopeApi.requests.pingPongView__init(
       { origin: envelopeServer.origin, envelopeServerId: envelopeServer.id },
       { name: props.name }
@@ -45,15 +64,12 @@ export const EmbeddedPingPong = React.forwardRef((props: Props, forwardedRef: Re
     return EmbeddedEnvelopeFactory({
       api: props,
       envelopePath: props.mapping.envelopePath,
-      envelopeId: props.mapping.envelopeId,
       origin: props.targetOrigin,
       refDelegate,
       pollInit,
-      // flagIframe
+      isDiv: props.isDiv
     });
   }, []);
-
-// useEffect init
 
   return <EmbeddedEnvelope ref={forwardedRef} />;
 });
