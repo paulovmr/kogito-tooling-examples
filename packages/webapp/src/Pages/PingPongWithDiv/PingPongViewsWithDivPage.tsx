@@ -15,14 +15,11 @@
  */
 
 import * as React from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Page, PageSection } from "@patternfly/react-core";
 import { EmbeddedPingPong } from "ping-pong-view-with-div/dist/embedded";
 import { PingPongChannelApi } from "ping-pong-view-with-div/dist/api";
 import { StatsSidebar } from "./StatsSidebar";
-import { init } from "ping-pong-view-with-div/dist/envelope";
-import { EnvelopeBusMessage } from "@kogito-tooling/envelope-bus/dist/api";
-import { PingPongReactImplFactory } from "ping-pong-view-with-div-react";
 
 let pings = 0;
 let pongs = 0;

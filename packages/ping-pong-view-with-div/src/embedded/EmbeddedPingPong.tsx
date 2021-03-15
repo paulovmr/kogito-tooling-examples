@@ -19,10 +19,10 @@ import { useCallback, useMemo } from "react";
 import { PingPongApi, PingPongChannelApi, PingPongEnvelopeApi } from "../api";
 import { EnvelopeServer } from "@kogito-tooling/envelope-bus/dist/channel";
 import { EmbeddedEnvelopeFactory } from "@kogito-tooling/envelope/dist/embedded";
-import { useEffect } from "react";
 import { init } from "../envelope";
 import { EnvelopeBusMessage } from "@kogito-tooling/envelope-bus/dist/api";
 import { PingPongReactImplFactory } from "ping-pong-view-with-div-react";
+import { ContainerType } from "@kogito-tooling/envelope/dist/api";
 
 export type Props = PingPongChannelApi & {
   mapping: {
@@ -35,16 +35,14 @@ export type Props = PingPongChannelApi & {
 };
 
 export const EmbeddedPingPong = React.forwardRef((props: Props, forwardedRef: React.Ref<PingPongApi>) => {
-  const refDelegate = useCallback((envelopeServer): PingPongApi => {
-    return {};
-  }, []);
+  const refDelegate = useCallback((envelopeServer): PingPongApi => ({}), []);
 
-  const pollInit = useCallback((envelopeServer: EnvelopeServer<PingPongChannelApi, PingPongEnvelopeApi>) => {
+  const pollInit = useCallback((envelopeServer: EnvelopeServer<PingPongChannelApi, PingPongEnvelopeApi>, container: () => HTMLDivElement | HTMLIFrameElement) => {
 
     if (props.isDiv) {
       init({
         envelopeId: envelopeServer.id,
-        container: document.getElementById(envelopeServer.id)!,
+        container: container(),
         bus: {
           postMessage<D, Type>(message: EnvelopeBusMessage<D, Type>, targetOrigin?: string, transfer?: any) {
             window.postMessage(message, "*", transfer);
@@ -63,11 +61,10 @@ export const EmbeddedPingPong = React.forwardRef((props: Props, forwardedRef: Re
   const EmbeddedEnvelope = useMemo(() => {
     return EmbeddedEnvelopeFactory({
       api: props,
-      envelopePath: props.mapping.envelopePath,
       origin: props.targetOrigin,
       refDelegate,
       pollInit,
-      isDiv: props.isDiv
+      config: { containerType: ContainerType.DIV }
     });
   }, []);
 

@@ -23,14 +23,20 @@ import { PingPongFactory } from "./PingPongFactory";
 import { PingPongEnvelopeContext } from "./PingPongEnvelopeContext";
 import { PingPongEnvelopeView, PingPongEnvelopeViewApi } from "./PingPongEnvelopeView";
 import { PingPongEnvelopeApiImpl } from "./PingPongEnvelopeApiImpl";
+import { ContainerType } from "@kogito-tooling/envelope/dist/api";
 
-export function init(args: { envelopeId: string, container: HTMLElement; bus: EnvelopeBus; pingPongViewFactory: PingPongFactory }) {
+export function init(args: {
+  envelopeId: string;
+  container: HTMLElement;
+  bus: EnvelopeBus;
+  pingPongViewFactory: PingPongFactory;
+}) {
   const envelope = new Envelope<
     PingPongEnvelopeApi,
     PingPongChannelApi,
     PingPongEnvelopeViewApi,
     PingPongEnvelopeContext
-  >(args.bus, args.envelopeId);
+  >(args.bus, { containerType: ContainerType.DIV, envelopeId: args.envelopeId });
 
   const envelopeViewDelegate = async () => {
     const ref = React.createRef<PingPongEnvelopeViewApi>();
@@ -41,7 +47,6 @@ export function init(args: { envelopeId: string, container: HTMLElement; bus: En
 
   const context: PingPongEnvelopeContext = {};
   return envelope.start(envelopeViewDelegate, context, {
-    create: (apiFactoryArgs) =>
-      new PingPongEnvelopeApiImpl(apiFactoryArgs, args.pingPongViewFactory),
+    create: (apiFactoryArgs) => new PingPongEnvelopeApiImpl(apiFactoryArgs, args.pingPongViewFactory),
   });
 }

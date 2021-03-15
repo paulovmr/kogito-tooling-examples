@@ -19,6 +19,7 @@ import { useCallback, useMemo } from "react";
 import { PingPongApi, PingPongChannelApi, PingPongEnvelopeApi } from "../api";
 import { EnvelopeServer } from "@kogito-tooling/envelope-bus/dist/channel";
 import { EmbeddedEnvelopeFactory } from "@kogito-tooling/envelope/dist/embedded";
+import { ContainerType } from "@kogito-tooling/envelope/dist/api";
 
 export type Props = PingPongChannelApi & {
   mapping: {
@@ -32,7 +33,7 @@ export type Props = PingPongChannelApi & {
 export const EmbeddedPingPong = React.forwardRef((props: Props, forwardedRef: React.Ref<PingPongApi>) => {
   const refDelegate = useCallback((envelopeServer): PingPongApi => ({}), []);
 
-  const pollInit = useCallback((envelopeServer: EnvelopeServer<PingPongChannelApi, PingPongEnvelopeApi>) => {
+  const pollInit = useCallback((envelopeServer: EnvelopeServer<PingPongChannelApi, PingPongEnvelopeApi>, container: () => HTMLDivElement | HTMLIFrameElement) => {
     return envelopeServer.envelopeApi.requests.pingPongView__init(
       { origin: envelopeServer.origin, envelopeServerId: envelopeServer.id },
       { name: props.name }
@@ -42,12 +43,12 @@ export const EmbeddedPingPong = React.forwardRef((props: Props, forwardedRef: Re
   const EmbeddedEnvelope = useMemo(() => {
     return EmbeddedEnvelopeFactory({
       api: props,
-      envelopePath: props.mapping.envelopePath,
       origin: props.targetOrigin,
       refDelegate,
       pollInit,
+      config: { containerType: ContainerType.IFRAME, envelopePath: props.mapping.envelopePath }
     });
   }, []);
 
-  return <EmbeddedEnvelope ref={forwardedRef} />;
+  return <EmbeddedEnvelope ref={forwardedRef}/>;
 });
