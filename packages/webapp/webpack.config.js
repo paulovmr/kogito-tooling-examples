@@ -26,8 +26,7 @@ module.exports = [
     index: "./src/index.tsx",
     "envelope/base64-editor": "./src/envelope/base64-editor.ts",
     "envelope/gwt-editors": "./src/envelope/gwt-editors.ts",
-    "envelope/ping-pong-view-react-impl": "./src/envelope/ping-pong-view-react-impl.ts",
-    "envelope/todo-list-view": "./src/envelope/todo-list-view.ts",
+    "envelope/ping-pong-view-react-impl": "./src/envelope/ping-pong-view-react-impl.ts"
   },
   output: {
     path: path.resolve("./dist"),

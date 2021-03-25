@@ -15,6 +15,7 @@
  */
 
 import { init } from "todo-list-view/dist/envelope";
+import { ContainerType } from "@kogito-tooling/envelope/dist/api";
 
 declare global {
   export const acquireVsCodeApi: any;
@@ -26,6 +27,7 @@ declare global {
  * from the Channel to start the View. Once the EnvelopeBusController is properly associated, the View renders.
  */
 init({
+  config: { containerType: ContainerType.IFRAME },
   container: document.getElementById("envelope-app")!,
   bus: acquireVsCodeApi(),
 });

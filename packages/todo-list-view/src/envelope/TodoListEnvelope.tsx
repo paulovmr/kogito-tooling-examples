@@ -21,7 +21,7 @@ import { TodoListEnvelopeContext } from "./TodoListEnvelopeContext";
 import { TodoListEnvelopeApiImpl } from "./TodoListEnvelopeApiImpl";
 import { TodoListChannelApi, TodoListEnvelopeApi } from "../api";
 import { TodoListEnvelopeView, TodoListEnvelopeViewApi } from "./TodoListEnvelopeView";
-import { Envelope } from "@kogito-tooling/envelope";
+import { Envelope, EnvelopeDivConfig, EnvelopeIFrameConfig } from "@kogito-tooling/envelope";
 
 /**
  * Function that starts an Envelope application.
@@ -30,7 +30,11 @@ import { Envelope } from "@kogito-tooling/envelope";
  * @param args.bus: The implementation of a `bus` that knows how to send messages to the Channel.
  *
  */
-export function init(args: { container: HTMLElement; bus: EnvelopeBus }) {
+export function init(args: {
+  config: EnvelopeDivConfig | EnvelopeIFrameConfig;
+  container: HTMLElement;
+  bus: EnvelopeBus;
+}) {
   /**
    * Creates a new generic Envelope, typed with the right interfaces.
    */
@@ -39,7 +43,7 @@ export function init(args: { container: HTMLElement; bus: EnvelopeBus }) {
     TodoListChannelApi,
     TodoListEnvelopeViewApi,
     TodoListEnvelopeContext
-  >(args.bus);
+  >(args.bus, args.config);
 
   /**
    * Function that knows how to render a Todo List View.
